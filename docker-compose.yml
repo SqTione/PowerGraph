@@ -1,0 +1,60 @@
+services:
+  # PHP and Yii 1.1
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    container_name: power_graph_app
+    volumes:
+      - ./src:/var/www/html
+      - /var/www/html/vendor
+    depends_on:
+      - db
+      - rabbitmq
+    networks:
+      - power_graph_network
+
+  # Nginx
+  web:
+    image: nginx:alpine
+    container_name: power_graph_web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - power_graph_network
+
+  # MySQL
+  db:
+    image: mysql:5.7
+    container_name: power_graph_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: power_graph_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user_password
+    ports:
+      - "3306:3306"
+    networks:
+      - power_graph_network
+
+  # RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: power_graph_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: user_password
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - power_graph_network
+
+networks:
+  power_graph_network:
+    driver: bridge
