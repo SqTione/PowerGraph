@@ -8,7 +8,10 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    git
+    git \
+    libcurl4-openssl-dev \
+    libpcre3-dev \
+    zlib1g-dev
 
 # Установка PHP расширений
 RUN docker-php-ext-install pdo_mysql zip gd mbstring xml

@@ -16,13 +16,14 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+        'application.services.*'
 	),
 
 	'modules'=>array(
 		/* Настройка Gii */
 		'gii'=>array(
 			'class'=>'system.gii.GiiModule',
-			'password'=>'H3i!u91',
+			'password'=>'password',
             // 'ipFilters'=>array('127.0.0.1','::1')
             'ipFilters'=>array(),   // TODO: !!!REMOVE ON RELEASE!!!
 		),
@@ -42,7 +43,7 @@ return array(
 			'urlFormat'=>'path',
 			'rules'=>array(
                 /* Маршруты для API */
-                'api/authenticate' => 'api/authenticate',
+                'api/authenticate' => 'auth/authenticate',
                 'api/fetch-data' => 'api/fetch-data',
 
                 /* Стандартные маршруты */
