@@ -20,6 +20,7 @@ class AuthService {
      * @throws InvalidArgumentException Логин или пароль пустые
      * @throws RuntimeException Произошла ошибка при запросе
      * @throws UnexpectedValueException $sessionId не найден в ответе
+     * @throws RuntimeException Произошла ошибка при обработке запроса
      */
     public function authenticate(string $login, string $password, string $verifyCode = null): string
     {
@@ -65,6 +66,7 @@ class AuthService {
             // Обработка ошибок запроса
             throw new RuntimeException('An error occurred during HTTP request: ' . $e->getMessage(), $e->getCode(), $e);
         } catch (Exception $e) {
+            // Обработка прочих ошибок
             throw new RuntimeException('Unexpected error occurred: ' . $e->getMessage(), $e->getCode(), $e);
         }
     }

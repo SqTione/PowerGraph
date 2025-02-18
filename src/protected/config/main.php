@@ -43,8 +43,8 @@ return array(
 			'urlFormat'=>'path',
 			'rules'=>array(
                 /* Маршруты для API */
-                'api/authenticate' => 'auth/authenticate',
-                'api/fetch-data' => 'api/fetch-data',
+                'api/authenticate' => 'auth/authenticate',                     // Маршрут аутентификации пользователя
+                'api/fetch-data' => 'fetchVoltageData/fetchVoltageData',       // Маршрут получения мгновенных значений для построения графика
 
                 /* Стандартные маршруты */
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',

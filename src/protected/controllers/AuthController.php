@@ -25,12 +25,16 @@ class AuthController extends CController {
 
         try {
             $sessionId = $this->authService->authenticate($login, $password, $verifyCode);
+
+            // Сохраняем sessionId в сессии
+            Yii::app()->session['sessionId'] = $sessionId;
+
             echo CJSON::encode(['sessionId' => $sessionId]);
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             echo CJSON::encode(['error' => $e->getMessage()]);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             echo CJSON::encode(['error' => $e->getMessage()]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             echo CJSON::encode(['error' => 'An unexpected error occurred' . $e->getMessage()]);
         }
     }
