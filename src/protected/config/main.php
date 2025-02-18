@@ -19,15 +19,13 @@ return array(
 	),
 
 	'modules'=>array(
-		// uncomment the following to enable the Gii tool
-		/*
+		/* Настройка Gii */
 		'gii'=>array(
 			'class'=>'system.gii.GiiModule',
-			'password'=>'Enter Your Password Here',
-			// If removed, Gii defaults to localhost only. Edit carefully to taste.
-			'ipFilters'=>array('127.0.0.1','::1'),
+			'password'=>'H3i!u91',
+            // 'ipFilters'=>array('127.0.0.1','::1')
+            'ipFilters'=>array(),   // TODO: !!!REMOVE ON RELEASE!!!
 		),
-		*/
 	),
 
 	// application components
@@ -38,17 +36,21 @@ return array(
 			'allowAutoLogin'=>true,
 		),
 
-		// uncomment the following to enable URLs in path-format
-		/*
+
+        /* Настройка маршрутов */
 		'urlManager'=>array(
 			'urlFormat'=>'path',
 			'rules'=>array(
+                /* Маршруты для API */
+                'api/authenticate' => 'api/authenticate',
+                'api/fetch-data' => 'api/fetch-data',
+
+                /* Стандартные маршруты */
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
 			),
 		),
-		*/
 
 		// database settings are configured in database.php
 		'db'=>require(dirname(__FILE__).'/database.php'),
