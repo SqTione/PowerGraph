@@ -25,11 +25,12 @@ docker-compose.override.yml
 .docker/
 
 # Исключаем зависимости
-vendor/
+src/vendor/
+src/yii_framework/framework/cli/views/webapp/protected/vendor/
 composer.lock
 
 # Исключаем кэш Yii
-protected/runtime/
+src/protected/runtime/
 assets/
 
 # Исключаем локальные конфигурации
