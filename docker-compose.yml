@@ -7,7 +7,7 @@ services:
     container_name: power_graph_app
     volumes:
       - ./src:/var/www/html
-      - /var/www/html/vendor
+      - vendor:/var/www/html/vendor
     depends_on:
       - db
       - rabbitmq
@@ -39,6 +39,8 @@ services:
       MYSQL_PASSWORD: user_password
     ports:
       - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
     networks:
       - power_graph_network
 
@@ -52,9 +54,18 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - power_graph_network
 
+# Глобальные тома
+volumes:
+  db_data:
+  rabbitmq_data:
+  vendor:
+
+# Сети
 networks:
   power_graph_network:
     driver: bridge
