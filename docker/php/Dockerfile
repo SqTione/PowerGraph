@@ -11,10 +11,29 @@ RUN apt-get update && apt-get install -y \
     git
 
 # Установка PHP расширений
-RUN docker-php-ext-install pdo_mysql zip gd mbstring xml
+RUN docker-php-ext-install pdo_mysql zip gd mbstring xml bcmath intl opcache
+
+# Установка зависимостей для AMQP
+RUN apt-get update && apt-get install -y \
+    librabbitmq-dev \
+    build-essential \
+    gcc \
+    make \
+    autoconf
+
+# Установка расширения AMQP через PECL
+RUN pecl install amqp && docker-php-ext-enable amqp
 
 # Установка Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Настройка прав для runtime и assets
+RUN mkdir -p /var/www/html/protected/runtime \
+    && mkdir -p /var/www/html/assets \
+    && chown -R www-data:www-data /var/www/html/protected/runtime \
+    && chown -R www-data:www-data /var/www/html/assets \
+    && chmod -R 775 /var/www/html/protected/runtime \
+    && chmod -R 775 /var/www/html/assets
 
 # Установка рабочей директории
 WORKDIR /var/www/html

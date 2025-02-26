@@ -29,14 +29,53 @@ class FetchVoltageDataService {
             throw new InvalidArgumentException("Parameters 'meterId', 'periodType', and 'periodValue' must be set");
         }
 
-        // Проверка и преобразование формата periodValue
-        try {
-            $dateTime = new DateTime($periodValue);
-            $periodValue = $dateTime->format('Y-m-d\TH:i:sP'); // Формат ISO 8601
-        } catch (Exception $e) {
-            throw new InvalidArgumentException("Invalid period value format. Expected format: YYYY-MM-DDTHH:MM:SS±HH:MM");
+        // Валидация periodType
+        $allowedPeriodTypes = ['moment', 'hour', 'day', 'month', 'year'];
+        if (!in_array($periodType, $allowedPeriodTypes)) {
+            throw new InvalidArgumentException("Invalid period type. Allowed values: " . implode(', ', $allowedPeriodTypes));
         }
 
+        // Преобразование periodValue в зависимости от periodType
+        try {
+            switch ($periodType) {
+                case 'moment':
+                    // RFC 3339: дата+время с часовым поясом
+                    $dateTime = new DateTime($periodValue);
+                    $periodValue = $dateTime->format('Y-m-d\TH:i:sP');
+                    break;
+
+                case 'hour':
+                    // RFC 3339: начало часа
+                    $dateTime = new DateTime($periodValue);
+                    $periodValue = $dateTime->setTime($dateTime->format('H'), 0, 0)->format('Y-m-d\TH:i:sP');
+                    break;
+
+                case 'day':
+                    // Только дата (ГГГГ-ММ-ДД)
+                    $dateTime = new DateTime($periodValue);
+                    $periodValue = $dateTime->format('Y-m-d');
+                    break;
+
+                case 'month':
+                    // Описание месяца (ГГГГ-ММ)
+                    $dateTime = new DateTime($periodValue);
+                    $periodValue = $dateTime->format('Y-m');
+                    break;
+
+                case 'year':
+                    // Год (целое число)
+                    $year = intval($periodValue);
+                    if ($year <= 0) {
+                        throw new InvalidArgumentException("Invalid year value. Must be a positive integer.");
+                    }
+                    $periodValue = $year;
+                    break;
+            }
+        } catch (Exception $e) {
+            throw new InvalidArgumentException("Invalid period value format for period type '$periodType'. Error: " . $e->getMessage());
+        }
+
+        // Проверка лимита
         if ($limit > 10000) {
             throw new UnexpectedValueException('Limit must be lower than or equal to 10000');
         }
@@ -69,13 +108,13 @@ class FetchVoltageDataService {
 
             $result = json_decode($response->getBody(), true);
 
+            // Логирование ответа
+            Yii::log(CJSON::encode($result), CLogger::LEVEL_INFO, 'api');
+
             // Проверка наличия ошибок в ответе API
             if (isset($result['error'])) {
                 throw new RuntimeException("API error: {$result['error']['message']}");
             }
-
-            // Вывод нашего запроса (удалить)
-            echo CJSON::encode($result);
 
             // Проверка наличия данных
             if (empty($result['result']['data'])) {

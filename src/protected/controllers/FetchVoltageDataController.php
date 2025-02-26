@@ -26,7 +26,7 @@ class FetchVoltageDataController extends CController {
 
         try {
             $voltageData = $this->fetchVoltageDataService->fetchVoltageData($meterId, $periodType, $periodValue, $limit);
-            echo CJSON::encode(['data' => $voltageData]);
+            echo CJSON::encode(['data' => $voltageData]);   // TODO: удалить на релизе
         } catch (InvalidArgumentException $e) {
             echo CJSON::encode(['error' => $e->getMessage()]);
         } catch (RuntimeException $e) {
