@@ -22,9 +22,7 @@ class VoltageData extends CActiveRecord {
             ['meter_id', 'numerical', 'integerOnly' => true],
             ['value', 'numerical'],
             ['phase_type', 'length', 'max' => 10],
-
-            // Дополнительные правила
-            ['timestamp', 'type', 'type' => 'datetime', 'message' => '{attribute} must be a valid date.'],
+            ['timestamp', 'type', 'type' => 'datetime'],
         ];
     }
 
@@ -35,10 +33,10 @@ class VoltageData extends CActiveRecord {
     public function attributeLabels() {
         return [
             'id' => 'ID',
-            'meter_id' => 'Meter ID',
-            'timestamp' => 'Timestamp',
-            'phase_type' => 'Phase Type',
-            'value' => 'Value',
+            'meter_id' => 'Счётчик',
+            'timestamp' => 'Время',
+            'phase_type' => 'Фаза',
+            'value' => 'Значение',
         ];
     }
 
@@ -49,5 +47,11 @@ class VoltageData extends CActiveRecord {
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
+    }
+
+    public function relations() {
+        return [
+            'meter' => [self::BELONGS_TO, 'Meter', 'meter_id'],
+        ];
     }
 }
