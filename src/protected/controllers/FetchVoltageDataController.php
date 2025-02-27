@@ -1,4 +1,5 @@
 <?php
+
 class FetchVoltageDataController extends CController {
     private $fetchVoltageDataService;
 
