@@ -22,7 +22,8 @@ class VoltageData extends CActiveRecord {
             ['meter_id', 'numerical', 'integerOnly' => true],
             ['value', 'numerical'],
             ['phase_type', 'length', 'max' => 10],
-            ['timestamp', 'type', 'type' => 'datetime'],
+            ['phase_type', 'in', 'range' => ['A', 'B', 'C']],
+            ['timestamp', 'date', 'format' => 'yyyy-MM-dd HH:mm:ss'],
         ];
     }
 

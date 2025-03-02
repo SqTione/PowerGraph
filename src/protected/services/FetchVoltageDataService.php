@@ -3,7 +3,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
 class FetchVoltageDataService {
-    private $client;
+    public $client;
     private $apiUrl;
     private $sessionId;
 
@@ -96,6 +96,8 @@ class FetchVoltageDataService {
             'id' => 1
         ];
 
+        echo "Request data: " . print_r($requestData, true);
+
         try {
             // Выполнение запроса
             $response = $this->client->post($this->apiUrl, [
@@ -110,6 +112,7 @@ class FetchVoltageDataService {
 
             // Логирование ответа
             Yii::log(CJSON::encode($result), CLogger::LEVEL_INFO, 'api');
+            echo "API raw response: " . print_r($result, true);
 
             // Проверка наличия ошибок в ответе API
             if (isset($result['error'])) {
@@ -121,13 +124,48 @@ class FetchVoltageDataService {
                 throw new UnexpectedValueException('Voltage data not found in the response');
             }
 
-            return $result['result']['data'];
+            // Форматирование данных
+            $formatedData = [];
+            $headers = $result['result']['headers'];
+
+            foreach ($result['result']['data'] as $row) {
+                $timestamp = $this->formatTimestamp($row[0]);
+
+                foreach ($headers as $index => $header) {
+                    if ($header['type'] === 'value') {
+                        // Исправлено: $index вместо $index + 1
+                        $formatedData[] = [
+                            'timestamp' => $timestamp,
+                            'phase_type' => $header['name'],
+                            'value' => $row[$index] ?? null,
+                        ];
+                    }
+                }
+            }
+
+            echo "Result: " . print_r($formatedData, true);
+            return $formatedData;
         } catch (RequestException $e) {
             // Обработка ошибок запроса
             throw new RuntimeException('An error occurred during HTTP request: ' . $e->getMessage(), $e->getCode(), $e);
         } catch (Exception $e) {
             // Обработка прочих ошибок
             throw new RuntimeException('Unexpected error occurred: ' . $e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    public function scheduleDataFetch(int $meterId) {
+        $producer = new QueueProducer();
+        $producer->sendMessage(json_encode(['meter_id' => $meterId]));
+        $producer->close();
+    }
+
+    private function formatTimestamp($timestamp) {
+        try {
+            $date = new DateTime($timestamp);
+            return $date->format('Y-m-d H:i:s'); // Убираем временную зону
+        } catch (Exception $e) {
+            throw new InvalidArgumentException("Invalid timestamp format: {$timestamp}");
         }
     }
 }

@@ -50,6 +50,7 @@ class AuthService {
             ]);
 
             $result = json_decode($response->getBody(), true);
+            Yii::log("Auth response: " . print_r($result, true), CLogger::LEVEL_INFO);
 
             $sessionId = $result['result'];
 
