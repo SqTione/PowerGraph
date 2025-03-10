@@ -1,9 +1,16 @@
 <?php
+
+namespace app\services;
+
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use app\components\DateFormatting\RFC3339DataFormatting;
+use Yii;
+use CJSON;
+use CLogger;
 
 class FetchVoltageDataService {
-    private $client;
+    public $client;
     private $apiUrl;
     private $sessionId;
 
@@ -26,58 +33,22 @@ class FetchVoltageDataService {
     public function fetchVoltageData(int $meterId, string $periodType, string $periodValue, int $limit = 1000) {
         // Проверка наличия id счетчика, типа периода и значения периода
         if (empty($meterId) || empty($periodType) || empty($periodValue)) {
-            throw new InvalidArgumentException("Parameters 'meterId', 'periodType', and 'periodValue' must be set");
+            throw new \InvalidArgumentException("Parameters 'meterId', 'periodType', and 'periodValue' must be set");
         }
 
         // Валидация periodType
         $allowedPeriodTypes = ['moment', 'hour', 'day', 'month', 'year'];
         if (!in_array($periodType, $allowedPeriodTypes)) {
-            throw new InvalidArgumentException("Invalid period type. Allowed values: " . implode(', ', $allowedPeriodTypes));
+            throw new \InvalidArgumentException("Invalid period type. Allowed values: " . implode(', ', $allowedPeriodTypes));
         }
 
-        // Преобразование periodValue в зависимости от periodType
-        try {
-            switch ($periodType) {
-                case 'moment':
-                    // RFC 3339: дата+время с часовым поясом
-                    $dateTime = new DateTime($periodValue);
-                    $periodValue = $dateTime->format('Y-m-d\TH:i:sP');
-                    break;
-
-                case 'hour':
-                    // RFC 3339: начало часа
-                    $dateTime = new DateTime($periodValue);
-                    $periodValue = $dateTime->setTime($dateTime->format('H'), 0, 0)->format('Y-m-d\TH:i:sP');
-                    break;
-
-                case 'day':
-                    // Только дата (ГГГГ-ММ-ДД)
-                    $dateTime = new DateTime($periodValue);
-                    $periodValue = $dateTime->format('Y-m-d');
-                    break;
-
-                case 'month':
-                    // Описание месяца (ГГГГ-ММ)
-                    $dateTime = new DateTime($periodValue);
-                    $periodValue = $dateTime->format('Y-m');
-                    break;
-
-                case 'year':
-                    // Год (целое число)
-                    $year = intval($periodValue);
-                    if ($year <= 0) {
-                        throw new InvalidArgumentException("Invalid year value. Must be a positive integer.");
-                    }
-                    $periodValue = $year;
-                    break;
-            }
-        } catch (Exception $e) {
-            throw new InvalidArgumentException("Invalid period value format for period type '$periodType'. Error: " . $e->getMessage());
-        }
+        // Форматирование даты
+        $dataFormating = new RFC3339DataFormatting();
+        $periodValue = $dataFormating->formatDate($periodType, $periodValue);
 
         // Проверка лимита
         if ($limit > 10000) {
-            throw new UnexpectedValueException('Limit must be lower than or equal to 10000');
+            throw new \UnexpectedValueException('Limit must be lower than or equal to 10000');
         }
 
         // Формирование запроса
@@ -96,6 +67,8 @@ class FetchVoltageDataService {
             'id' => 1
         ];
 
+        echo "Request data: " . print_r($requestData, true);
+
         try {
             // Выполнение запроса
             $response = $this->client->post($this->apiUrl, [
@@ -110,24 +83,46 @@ class FetchVoltageDataService {
 
             // Логирование ответа
             Yii::log(CJSON::encode($result), CLogger::LEVEL_INFO, 'api');
+            echo "API raw response: " . print_r($result, true);
 
             // Проверка наличия ошибок в ответе API
             if (isset($result['error'])) {
-                throw new RuntimeException("API error: {$result['error']['message']}");
+                throw new \RuntimeException("API error: {$result['error']['message']}");
             }
 
             // Проверка наличия данных
             if (empty($result['result']['data'])) {
-                throw new UnexpectedValueException('Voltage data not found in the response');
+                throw new \UnexpectedValueException('Voltage data not found in the response');
             }
 
-            return $result['result']['data'];
+            // Форматирование полученных данных
+            $formatedData = [];
+            $headers = $result['result']['headers'];
+
+            foreach ($result['result']['data'] as $row) {
+                $timestamp = new \DateTime($row[0]);
+                $timestamp->format('Y-m-d H:i:s');
+
+                foreach ($headers as $index => $header) {
+                    if ($header['type'] === 'value') {
+                        $formatedData[] = [
+                            'timestamp' => $timestamp->format('Y-m-d H:i:s'),
+                            'phase_type' => $header['name'],
+                            'value' => $row[$index] ?? null,
+                        ];
+                    }
+                }
+            }
+
+            Yii::log("API response: " . print_r($result, true), CLogger::LEVEL_ERROR);
+            echo "Result: " . print_r($formatedData, true);
+            return $formatedData;
         } catch (RequestException $e) {
             // Обработка ошибок запроса
-            throw new RuntimeException('An error occurred during HTTP request: ' . $e->getMessage(), $e->getCode(), $e);
-        } catch (Exception $e) {
+            throw new \RuntimeException('An error occurred during HTTP request: ' . $e->getMessage(), $e->getCode(), $e);
+        } catch (\Exception $e) {
             // Обработка прочих ошибок
-            throw new RuntimeException('Unexpected error occurred: ' . $e->getMessage(), $e->getCode(), $e);
+            throw new \RuntimeException('Unexpected error occurred: ' . $e->getMessage(), $e->getCode(), $e);
         }
     }
 }

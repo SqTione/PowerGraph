@@ -14,9 +14,9 @@ return array(
 
     // autoloading model and component classes
     'import'=>array(
-        'application.models.*',
-        'application.components.*',
-        'application.services.*'
+        'application.models.*.*',
+        'application.components.*.*',
+        'application.services.*.*'
     ),
 
     'modules'=>array(
@@ -66,7 +66,8 @@ return array(
             'routes'=>array(
                 array(
                     'class'=>'CFileLogRoute',
-                    'levels'=>'error, warning',
+                    'levels'=>'error, warning, info',
+                    'categories' => 'application.*'
                 ),
                 // uncomment the following to show log messages on web pages
                 /*

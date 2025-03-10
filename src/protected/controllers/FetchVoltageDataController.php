@@ -1,4 +1,7 @@
 <?php
+
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+
 class FetchVoltageDataController extends CController {
     private $fetchVoltageDataService;
 

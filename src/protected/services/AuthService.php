@@ -1,31 +1,39 @@
 <?php
 
+namespace app\services;
+
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Yii;
+use CLogger;
 
 class AuthService {
     private $client;
     private $apiUrl;
+    private $login;
+    private $password;
+    private $verifyCode;
 
-    public function __construct() {
+    public function __construct(string $login, string $password, string $verifyCode = null) {
         $this->client = new Client();
         $this->apiUrl = 'https://app.yaenergetik.ru/api?v2';
+        $this->login = $login;
+        $this->password = $password;
+        $this->verifyCode = $verifyCode;
     }
 
     /**
      * Авторизация пользователя в сети "яЭнергетик"
-     * @param string $login Логин пользователя
-     * @param string $password Пароль пользователя
      * @return string Идентификатор пользователя
      * @throws InvalidArgumentException Логин или пароль пустые
      * @throws RuntimeException Произошла ошибка при запросе
      * @throws UnexpectedValueException $sessionId не найден в ответе
      * @throws RuntimeException Произошла ошибка при обработке запроса
      */
-    public function authenticate(string $login, string $password, string $verifyCode = null): string
+    public function authenticate(): string
     {
         // Проверка наличия логина и пароля
-        if (empty($login) || empty($password)) {
+        if (empty($this->login) || empty($this->password)) {
             throw new InvalidArgumentException('Login and password should not be empty');
         }
 
@@ -35,9 +43,9 @@ class AuthService {
             'method' => 'auth.login',
             'params' => [
                 'mode' => 'user',
-                'user' => $login,
-                'password' => $password,
-                'verifyCode' => $verifyCode
+                'user' => $this->login,
+                'password' => $this->password,
+                'verifyCode' => $this->verifyCode
             ],
             'id' => 1
         ];
@@ -50,6 +58,7 @@ class AuthService {
             ]);
 
             $result = json_decode($response->getBody(), true);
+            Yii::log("Auth response: " . print_r($result, true), CLogger::LEVEL_INFO);
 
             $sessionId = $result['result'];
 
