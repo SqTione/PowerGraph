@@ -20,4 +20,17 @@ class Controller extends CController
 	 * for more details on how to specify this property.
 	 */
 	public $breadcrumbs=array();
+
+    public function init() {
+        // Публикуем каталог jquery в assets
+        //$jqueryAssets = Yii::app()->assetManager->publish(Yii::getPathOfAlias('application.extensions.jquery'));
+
+        // Подключаем jQuery
+        //Yii::app()->clientScript->registerScriptFile($jqueryAssets . '/jquery.min.js', CClientScript::POS_HEAD);
+
+        // Подключаем Chart.js
+        Yii::app()->clientScript->registerScriptFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js', CClientScript::POS_HEAD);
+
+        parent::init();
+    }
 }
