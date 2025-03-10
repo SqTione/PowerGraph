@@ -13,6 +13,8 @@ services:
       - rabbitmq
     networks:
       - power_graph_network
+    command: ["bash", "-c", "cron && php-fpm"]
+    tty: true
 
   # Nginx
   web:

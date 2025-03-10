@@ -8,7 +8,9 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    git
+    git \
+    cron \
+    nano
 
 # Установка PHP расширений
 RUN docker-php-ext-install pdo_mysql zip gd mbstring xml bcmath intl opcache
@@ -40,6 +42,15 @@ WORKDIR /var/www/html
 
 # Копирование файлов проекта
 COPY ./src /var/www/html
+
+# Копируем crontab-файл
+COPY ./docker/crontab /etc/cron.d/mycron
+
+# Даем права
+RUN chmod 0644 /etc/cron.d/mycron
+
+# Добавляем cron в автозапуск
+RUN crontab /etc/cron.d/mycron
 
 # Установка зависимостей через Composer
 RUN composer install --no-dev --prefer-dist
