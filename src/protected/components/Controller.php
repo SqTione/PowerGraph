@@ -23,13 +23,26 @@ class Controller extends CController
 
     public function init() {
         // Публикуем каталог jquery в assets
-        //$jqueryAssets = Yii::app()->assetManager->publish(Yii::getPathOfAlias('application.extensions.jquery'));
+        $jqueryAssets = Yii::app()->assetManager->publish(Yii::getPathOfAlias('application.extensions.jquery'));
 
         // Подключаем jQuery
-        //Yii::app()->clientScript->registerScriptFile($jqueryAssets . '/jquery.min.js', CClientScript::POS_HEAD);
+        Yii::app()->clientScript->registerScriptFile(
+            'https://code.jquery.com/jquery-3.6.0.min.js',
+            CClientScript::POS_HEAD
+        );
+
+        Yii::app()->clientScript->registerScriptFile(
+            'https://code.jquery.com/ui/1.13.2/jquery-ui.min.js',
+            CClientScript::POS_HEAD
+        );
+
+        Yii::app()->clientScript->registerCssFile(
+            'https://code.jquery.com/ui/1.13.2/themes/smoothness/jquery-ui.css'
+        );
 
         // Подключаем Chart.js
         Yii::app()->clientScript->registerScriptFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js', CClientScript::POS_HEAD);
+        Yii::app()->clientScript->registerScriptFile('https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js', CClientScript::POS_HEAD);
 
         parent::init();
     }
