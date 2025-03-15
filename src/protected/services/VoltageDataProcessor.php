@@ -44,6 +44,18 @@ class VoltageDataProcessor {
                     continue;
                 }
 
+                // Проверка дублирующихся записей
+                $existingRecord = VoltageData::model()->findByAttributes([
+                    'meter_id' => $meter->id,
+                    'timestamp' => $entry['timestamp'],
+                    'phase_type' => $entry['phase_type']
+                ]);
+
+                if ($existingRecord) {
+                    Yii::log("Пропущена дублирующая запись: " . print_r($entry, true), CLogger::LEVEL_WARNING);
+                    continue;
+                }
+
                 $model = new VoltageData();
                 $model->attributes = $entry;
                 $model->meter_id = $meter->id;

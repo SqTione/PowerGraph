@@ -34,4 +34,27 @@ class Meters extends CActiveRecord {
             'voltageData' => [self::HAS_MANY, 'VoltageData', 'meter_id'],
         ];
     }
+
+    /**
+     * Возвращает счётчик по API ID
+     * @param int $apiId
+     * @return Meters|null
+    */
+    public static function findByApiId(int $apiId): Meters {
+        return self::model()->findByAttributes(['api_id' => $apiId]);
+    }
+
+    /**
+     * Возвращает счётчик c проверкой существования
+     * @param int $id
+     * @throws CHttpException Счётчик с данным $id не найден
+     * @return Meters
+    */
+    public static function getValidatedMeter(int $id): Meters {
+        if (!$meter = self::model()->findByPk($id)) {
+            throw new CHttpException(404, "Meter with id {$id} not found");
+        }
+
+        return $meter;
+    }
 }

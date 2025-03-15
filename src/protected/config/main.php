@@ -41,10 +41,12 @@ return array(
         /* Настройка маршрутов */
         'urlManager'=>array(
             'urlFormat'=>'path',
+            'showScriptName' => false,
             'rules'=>array(
                 /* Маршруты для API */
                 'api/authenticate' => 'auth/authenticate',                     // Маршрут аутентификации пользователя
                 'api/fetch-data' => 'fetchVoltageData/fetchVoltageData',       // Маршрут получения мгновенных значений для построения графика
+                'voltage-data' => 'voltageData/index',
 
                 /* Стандартные маршруты */
                 '<controller:\w+>/<id:\d+>'=>'<controller>/view',
