@@ -9,6 +9,7 @@ class VoltageDataProcessor {
 
     /**
      * Обрабатывает и записывает данные мгновенных значений
+     * @param string $apiMeterId ID счётчика из внешней API
     */
     public function process(string $apiMeterId): void {
         try {
