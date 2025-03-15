@@ -31,7 +31,7 @@ class RabbitMQConsumer implements QueueConsumerInterface {
     }
 
     /**
-     * ???
+     * Начинает приём сообщений из очереди
     */
     public function consume(callable $callback): void {
         $this->channel->basic_qos(null, 1, null);
@@ -39,7 +39,7 @@ class RabbitMQConsumer implements QueueConsumerInterface {
     }
 
     /**
-     * ???
+     * Запускает цикл ожидания
     */
     public function wait(): void {
         echo 'Waiting for messages...' . PHP_EOL;

@@ -51,6 +51,9 @@ class QueueConsumerCommand extends CConsoleCommand {
         }
     }
 
+    /**
+     * Команда для получения данных со всех счётчиков в БД
+    */
     public function actionScheduleAllMeters() {
         Yii::import('application.components.Queue.RabbitMQProducer');
         Yii::import('application.models.Meters');
