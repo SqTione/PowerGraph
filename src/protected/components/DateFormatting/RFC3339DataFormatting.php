@@ -1,9 +1,6 @@
 <?php
 
-namespace app\components\DateFormatting;
-use DateTime;
-use Exception;
-use InvalidArgumentException;
+Yii::import('application.components.DateFormatting.DateFormattingInterface');
 
 class RFC3339DataFormatting implements DateFormattingInterface {
 

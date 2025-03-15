@@ -1,15 +1,5 @@
 <?php
 
-namespace app\services;
-
-use app\services\AuthService;
-use app\services\FetchVoltageDataService;
-use Meters;
-use VoltageData;
-use Exception;
-use Yii;
-use CLogger;
-
 class VoltageDataProcessor {
     private $authService;
 
@@ -29,7 +19,7 @@ class VoltageDataProcessor {
             Yii::log("Authenticated with session ID: {$sessionId}", CLogger::LEVEL_ERROR);
 
             // Получение мгновенных значений
-            $fetchVoltageDataService = new FetchvoltageDataService($sessionId);
+            $fetchVoltageDataService = new FetchVoltageDataService($sessionId);
             $voltageData = $fetchVoltageDataService->fetchVoltageData(
                 $apiMeterId,
                 'hour',

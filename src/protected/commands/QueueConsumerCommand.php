@@ -1,9 +1,13 @@
 <?php
 
-use app\components\Queue\RabbitMQConsumer;
-use app\components\Queue\RabbitMQProducer;
-use app\services\VoltageDataProcessor;
-use app\services\AuthService;
+// Импорт компонентов(автозагрузчик здесь не работает)
+Yii::import('application.components.Queue.RabbitMQConsumer');
+Yii::import('application.services.AuthService');
+Yii::import('application.services.FetchVoltageDataService');
+Yii::import('application.services.VoltageDataProcessor');
+Yii::import('application.components.Queue.RabbitMQProducer');
+Yii::import('application.models.Meters');
+Yii::import('application.models.VoltageData');
 
 class QueueConsumerCommand extends CConsoleCommand {
     private $shouldStop = false;
@@ -13,15 +17,6 @@ class QueueConsumerCommand extends CConsoleCommand {
      * Команда для запуска: ./yiic queueconsumer
     */
     public function actionIndex() {
-        // Импорт компонентов(автозагрузчик здесь не работает)
-        Yii::import('application.components.Queue.RabbitMQConsumer');
-        Yii::import('application.services.AuthService');
-        Yii::import('application.services.FetchVoltageDataService');
-        Yii::import('application.services.VoltageDataProcessor');
-        Yii::import('application.components.Queue.RabbitMQProducer');
-        Yii::import('application.models.Meters');
-        Yii::import('application.models.VoltageData');
-
         $config = require Yii::getPathOfAlias('application.config.queue').'.php';
 
         $consumer = new RabbitMQConsumer($config);

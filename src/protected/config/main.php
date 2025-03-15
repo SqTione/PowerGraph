@@ -44,9 +44,7 @@ return array(
             'showScriptName' => false,
             'rules'=>array(
                 /* Маршруты для API */
-                'api/authenticate' => 'auth/authenticate',                     // Маршрут аутентификации пользователя
-                'api/fetch-data' => 'fetchVoltageData/fetchVoltageData',       // Маршрут получения мгновенных значений для построения графика
-                'voltage-data' => 'voltageData/index',
+                'voltage-data' => 'voltageData/index',      // Маршрут вывода мгновенных значений в виде графика
 
                 /* Стандартные маршруты */
                 '<controller:\w+>/<id:\d+>'=>'<controller>/view',

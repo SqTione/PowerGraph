@@ -1,11 +1,7 @@
 <?php
 
-namespace app\services;
-
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use Yii;
-use CLogger;
 
 class AuthService {
     private $client;

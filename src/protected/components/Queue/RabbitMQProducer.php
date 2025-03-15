@@ -1,10 +1,9 @@
 <?php
 
-namespace app\components\Queue;
-
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
-use Psr\Http\Message\MessageInterface;
+
+Yii::import('application.components.Queue.QueueProducerInterface');
 
 class RabbitMQProducer implements QueueProducerInterface {
     private $connection;
