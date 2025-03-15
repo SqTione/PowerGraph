@@ -7,6 +7,9 @@ class VoltageDataProcessor {
         $this->authService = $authService;
     }
 
+    /**
+     * Обрабатывает и записывает данные мгновенных значений
+    */
     public function process(string $apiMeterId): void {
         try {
             Yii::log("Processing meter: {$apiMeterId}", CLogger::LEVEL_ERROR);
@@ -51,11 +54,11 @@ class VoltageDataProcessor {
                 $model->meter_id = $meter->id;
 
                 if (!$model->save()) {
-                    Yii::log('Ошибка сохранения: ' . print_r($model->getErrors(), true), CLogger::LEVEL_ERROR);
+                    throw new Exception('Error saving voltage data: ' . $model->getErrors());
                 }
             }
         } catch (Exception $e) {
-            Yii::log('Error: ' . $e->getMessage(), CLogger::LEVEL_ERROR);
+            throw new Exception('Error:' . $e->getMessage(), $e->getCode(), $e);
         }
     }
 }
