@@ -36,7 +36,7 @@
                     {
                         label: 'Фаза C',
                         data: chartData.dataC,
-                        borderColor: '#45B7D1',
+                        borderColor: '#e68b49',
                         fill: false
                     }
                 ]
