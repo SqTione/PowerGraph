@@ -63,8 +63,17 @@
     }
 
     function updateChart() {
-        const meterId = document.getElementById('meter_select').value;
         const period = document.getElementById('period_select').value;
+        const dateRangeDiv = document.getElementById('date-range');
+
+        // Показываем поля для ввода дат, если выбран "Произвольный период"
+        if (period === 'custom') {
+            dateRangeDiv.style.display = 'block';
+        } else {
+            dateRangeDiv.style.display = 'none';
+        }
+
+        const meterId = document.getElementById('meter_select').value;
         const startDate = document.getElementById('start_date').value;
         const endDate = document.getElementById('end_date').value;
 

@@ -103,7 +103,7 @@ class VoltageData extends CActiveRecord {
         ];
 
         foreach ($data as $record) {
-            // Исправлено: группируем данные по временным меткам
+            // Группируем данные по временным меткам
             $timestamp = Yii::app()->dateFormatter->format('d.MM.yyyy HH:mm:ss', $record->timestamp);
 
             // Проверяем, есть ли уже эта метка
