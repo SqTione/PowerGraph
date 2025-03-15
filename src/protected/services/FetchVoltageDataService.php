@@ -1,13 +1,9 @@
 <?php
 
-namespace app\services;
-
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use app\components\DateFormatting\RFC3339DataFormatting;
-use Yii;
-use CJSON;
-use CLogger;
+
+Yii::import('application.components.DateFormatting.RFC3339DataFormatting');
 
 class FetchVoltageDataService {
     public $client;

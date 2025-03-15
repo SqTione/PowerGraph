@@ -1,8 +1,8 @@
 <?php
 
-namespace app\components\Queue;
-
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+
+Yii::import('application.components.Queue.QueueConsumerInterface');
 
 class RabbitMQConsumer implements QueueConsumerInterface {
     private $connection;
@@ -31,15 +31,15 @@ class RabbitMQConsumer implements QueueConsumerInterface {
     }
 
     /**
-     * ???
+     * Начинает приём сообщений из очереди
     */
     public function consume(callable $callback): void {
         $this->channel->basic_qos(null, 1, null);
-        $this->channel->basic_consume('voltage_data_queue', '', false, true, false, false, $callback);
+        $this->channel->basic_consume('voltage_data_queue', '', false, false, false, false, $callback);
     }
 
     /**
-     * ???
+     * Запускает цикл ожидания
     */
     public function wait(): void {
         echo 'Waiting for messages...' . PHP_EOL;

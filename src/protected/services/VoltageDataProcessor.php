@@ -1,15 +1,5 @@
 <?php
 
-namespace app\services;
-
-use app\services\AuthService;
-use app\services\FetchVoltageDataService;
-use Meters;
-use VoltageData;
-use Exception;
-use Yii;
-use CLogger;
-
 class VoltageDataProcessor {
     private $authService;
 
@@ -17,6 +7,10 @@ class VoltageDataProcessor {
         $this->authService = $authService;
     }
 
+    /**
+     * Обрабатывает и записывает данные мгновенных значений
+     * @param string $apiMeterId ID счётчика из внешней API
+    */
     public function process(string $apiMeterId): void {
         try {
             Yii::log("Processing meter: {$apiMeterId}", CLogger::LEVEL_ERROR);
@@ -29,7 +23,7 @@ class VoltageDataProcessor {
             Yii::log("Authenticated with session ID: {$sessionId}", CLogger::LEVEL_ERROR);
 
             // Получение мгновенных значений
-            $fetchVoltageDataService = new FetchvoltageDataService($sessionId);
+            $fetchVoltageDataService = new FetchVoltageDataService($sessionId);
             $voltageData = $fetchVoltageDataService->fetchVoltageData(
                 $apiMeterId,
                 'hour',
@@ -61,11 +55,11 @@ class VoltageDataProcessor {
                 $model->meter_id = $meter->id;
 
                 if (!$model->save()) {
-                    Yii::log('Ошибка сохранения: ' . print_r($model->getErrors(), true), CLogger::LEVEL_ERROR);
+                    throw new Exception('Error saving voltage data: ' . $model->getErrors());
                 }
             }
         } catch (Exception $e) {
-            Yii::log('Error: ' . $e->getMessage(), CLogger::LEVEL_ERROR);
+            throw new Exception('Error:' . $e->getMessage(), $e->getCode(), $e);
         }
     }
 }

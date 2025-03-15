@@ -1,10 +1,9 @@
 <?php
 
-namespace app\components\Queue;
-
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
-use Psr\Http\Message\MessageInterface;
+
+Yii::import('application.components.Queue.QueueProducerInterface');
 
 class RabbitMQProducer implements QueueProducerInterface {
     private $connection;
@@ -17,7 +16,7 @@ class RabbitMQProducer implements QueueProducerInterface {
     }
 
     /**
-     * Подключение к RabbitMQ с данными из конфига
+     * Подключается к RabbitMQ с данными из конфига
     */
     private function connect() {
         $this->connection = new AMQPStreamConnection(
@@ -33,7 +32,7 @@ class RabbitMQProducer implements QueueProducerInterface {
     }
 
     /**
-     * Отправка сообщения в очередь.
+     * Отправляет сообщение в очередь
     */
     public function sendMessage(string $message): void {
         $msg = new AMQPMessage($message, ['delivery_mode' => 2]);
@@ -41,7 +40,7 @@ class RabbitMQProducer implements QueueProducerInterface {
     }
 
     /**
-     * Закрытие соединения с RabbitMQ
+     * Закрывает соединение с RabbitMQ
     */
     public function close(): void {
         try {

@@ -1,14 +1,14 @@
 <?php
 
-namespace app\components\DateFormatting;
-use DateTime;
-use Exception;
-use InvalidArgumentException;
+Yii::import('application.components.DateFormatting.DateFormattingInterface');
 
 class RFC3339DataFormatting implements DateFormattingInterface {
 
     /**
      * Форматирование даты в cоответствии с RFC 3339
+     * @param string $periodType Тип периода (moment | hour | day | month | year)
+     * @param string $periodValue Значение периода
+     * @return string $date Отформатированная дата
     */
     public function formatDate(string $periodType, string $periodValue): string {
         try {
