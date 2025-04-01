@@ -69,7 +69,7 @@ class VoltageData extends CActiveRecord {
                 $criteria->addBetweenCondition('timestamp', date('Y-m-d 00:00:00', strtotime('-1 day')), date('Y-m-d 23:59:59', strtotime('-1 day')));
                 break;
             case 'week':
-                // Исправлено: начало недели и текущая дата
+                // Начало недели и текущая дата
                 $startDateWeek = date('Y-m-d 00:00:00', strtotime('last Monday'));
                 $endDateWeek = date('Y-m-d 23:59:59');
                 $criteria->addBetweenCondition('timestamp', $startDateWeek, $endDateWeek);
@@ -77,7 +77,7 @@ class VoltageData extends CActiveRecord {
             case 'month':
                 $criteria->addBetweenCondition('timestamp',
                     date('Y-m-01 00:00:00'),
-                    date('Y-m-t 23:59:59') // Конец текущего месяца
+                    date('Y-m-t 23:59:59')
                 );
                 break;
             case 'custom':

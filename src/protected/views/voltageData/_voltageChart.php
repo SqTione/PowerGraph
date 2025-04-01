@@ -1,15 +1,39 @@
-<canvas id="voltageChart" style="width: 100%; margin: 0 auto"></canvas>
+<div class="chart">
+    <div class="chart__box">
+        <div class="chart__container">
+            <div class="chart__container-body">
+                <canvas id="voltage-chart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .chart__box {
+        overflow: hidden;
+    }
+
+    .chart__container {
+        width: 100%;
+        overflow-x: scroll;
+    }
+
+    .chart__container-body {
+        height: 600px;
+    }
+</style>
 
 <script type="text/javascript">
     let voltageChartInstance = null;
 
     document.addEventListener('DOMContentLoaded', function() {
         createChart(<?php echo CJSON::encode($chartData); ?>);
+        calculateChartWidth();
     });
 
 
     function createChart(chartData) {
-        const ctx = document.getElementById('voltageChart').getContext('2d');
+        const ctx = document.getElementById('voltage-chart').getContext('2d');
 
         // Если график уже создан, уничтожаем его перед созданием нового
         if (voltageChartInstance !== null) {
@@ -43,6 +67,8 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
+                animation: false,
                 plugins: {
                     title: {
                         display: true,
@@ -51,7 +77,7 @@
                 },
                 scales: {
                     x: {
-                        title: { display: true, text: 'Время' }
+                        title: { display: true, text: 'Время' },
                     },
                     y: {
                         title: { display: true, text: 'Напряжение, В' },
@@ -83,8 +109,20 @@
             dataType: 'json',
             success: function(response) {
                 createChart(response);
+                calculateChartWidth();
             }
         });
     }
 
+    function calculateChartWidth() {
+        const chartContainerBody = document.querySelector('.chart__container-body');
+        const totalLabels = voltageChartInstance.data.labels.length;
+
+        if(totalLabels > 24) {
+            const newWidth = 1000 + ((totalLabels - 24) * 20);
+            chartContainerBody.style.width = `${newWidth}px`;
+        } else {
+            chartContainerBody.style.width = '100%';
+        }
+    }
 </script>

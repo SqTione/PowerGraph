@@ -16,7 +16,8 @@ return array(
     'import'=>array(
         'application.models.*.*',
         'application.components.*.*',
-        'application.services.*.*'
+        'application.services.*.*',
+        'application.seeders.*.*',
     ),
 
     'modules'=>array(
