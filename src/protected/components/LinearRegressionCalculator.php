@@ -1,7 +1,6 @@
 <?php
 
-class LinearRegressionCalculator
-{
+class LinearRegressionCalculator {
     private $a;                     // Угловой коэффициент
     private $b;                     // Свободный член
 
