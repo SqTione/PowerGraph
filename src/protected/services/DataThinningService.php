@@ -29,17 +29,15 @@ class DataThinningService {
             ];
         }, $oldData);
 
-        Yii::log("Prepared data: " . print_r($preparedOldData, true), CLogger::LEVEL_WARNING, 'application');
-
-        // Прореживаем данные
-        $thinnedData = $this->strategy->thinData($oldData);
-
-        Yii::log("Thinned data: " . print_r($thinnedData, true), CLogger::LEVEL_WARNING, 'application');
-
-        // Заносим данные в архивную таблицу
-        $this->moveToArchiveTable($preparedOldData);
-
-        Yii::log("Data thinning process completed successfully.", CLogger::LEVEL_WARNING, 'application');
+        $transaction = Yii::app()->db->beginTransaction();
+        try {
+            $this->moveToArchiveTable($preparedOldData);
+            $this->deleteOldData();
+            $transaction->commit();
+        } catch (Exception $e) {
+            $transaction->rollback();
+            Yii::log("Error during data processing: " . $e->getMessage(), CLogger::LEVEL_ERROR, 'application');
+        }
     }
 
     private function getOldData() {
@@ -71,6 +69,22 @@ class DataThinningService {
                 ]);
 
             Yii::log("Moved " . count($data) . " records", CLogger::LEVEL_WARNING);*/
+        }
+    }
+
+    private function deleteOldData() {
+        // Вычисляем дату неделю назад
+        $oneWeekAgo = date('Y-m-d H:i:s', strtotime("-1 week"));
+
+        // Формируем SQL-запрос для удаления старых данных
+        $deletedCount = Yii::app()->db->createCommand()
+            ->delete('voltage_data', 'timestamp < :date', [':date' => $oneWeekAgo]);
+
+        // Логируем результат
+        if ($deletedCount > 0) {
+            Yii::log("Deleted $deletedCount records older than one week from voltage_data table.", CLogger::LEVEL_INFO, 'application');
+        } else {
+            Yii::log("No old data found to delete.", CLogger::LEVEL_INFO, 'application');
         }
     }
 }

@@ -27,8 +27,29 @@ class PrepareVoltageDataService {
         $meters = Meters::model()->findAll();
         $selectedMeter = Meters::model()->getValidatedMeter($this->meterId);
 
-        // Получаем данные для графика
-        $chartData = VoltageData::model()->getChartData($selectedMeter->id, $this->period, $this->startDate, $this->endDate);
+        // Получаем данные из основной таблицы voltage_data
+        $mainData = VoltageData::model()->getChartData($selectedMeter->id, $this->period, $this->startDate, $this->endDate);
+
+        // Получаем данные из архивной таблицы thinned_voltage_data
+        $archivedData = ThinnedVoltageData::model()->getChartData($selectedMeter->id, $this->period, $this->startDate, $this->endDate);
+
+        // Объединяем данные
+        $combinedLabels = array_unique(array_merge($mainData['labels'], $archivedData['labels']));
+        sort($combinedLabels); // Сортируем метки по времени
+
+        $combinedData = [
+            'labels' => $combinedLabels,
+            'dataA' => [],
+            'dataB' => [],
+            'dataC' => [],
+        ];
+
+        // Объединяем данные для каждой фазы
+        foreach ($combinedLabels as $label) {
+            $combinedData['dataA'][$label] = $mainData['dataA'][$label] ?? $archivedData['dataA'][$label] ?? null;
+            $combinedData['dataB'][$label] = $mainData['dataB'][$label] ?? $archivedData['dataB'][$label] ?? null;
+            $combinedData['dataC'][$label] = $mainData['dataC'][$label] ?? $archivedData['dataC'][$label] ?? null;
+        }
 
         return [
             'meters' => $meters,
@@ -36,7 +57,7 @@ class PrepareVoltageDataService {
             'period' => $this->period,
             'startDate' => $this->startDate,
             'endDate' => $this->endDate,
-            'chartData' => $chartData,
+            'chartData' => $combinedData, // Объединенные данные для графика
         ];
     }
 }

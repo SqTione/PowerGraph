@@ -59,8 +59,9 @@ class VoltageData extends CActiveRecord {
     public static function getChartData(int $meterId, string $period = null, string $startDate = null, string $endDate = null) {
         $criteria = new CDbCriteria();
         $criteria->compare('meter_id', $meterId);
-        $criteria->order = 'timestamp ASC';
+        $criteria->order = 'timestamp ASC'; // Сортируем данные по времени
 
+        // Формируем условия выборки данных в зависимости от периода
         switch ($period) {
             case 'today':
                 $criteria->addBetweenCondition('timestamp', date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59'));
@@ -69,7 +70,6 @@ class VoltageData extends CActiveRecord {
                 $criteria->addBetweenCondition('timestamp', date('Y-m-d 00:00:00', strtotime('-1 day')), date('Y-m-d 23:59:59', strtotime('-1 day')));
                 break;
             case 'week':
-                // Начало недели и текущая дата
                 $startDateWeek = date('Y-m-d 00:00:00', strtotime('last Monday'));
                 $endDateWeek = date('Y-m-d 23:59:59');
                 $criteria->addBetweenCondition('timestamp', $startDateWeek, $endDateWeek);
@@ -81,7 +81,6 @@ class VoltageData extends CActiveRecord {
                 );
                 break;
             case 'custom':
-                // Добавлена проверка дат
                 if ($startDate && $endDate) {
                     $criteria->addBetweenCondition('timestamp',
                         date('Y-m-d 00:00:00', strtotime($startDate)),
@@ -93,8 +92,10 @@ class VoltageData extends CActiveRecord {
                 $criteria->addBetweenCondition('timestamp', date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59'));
         }
 
+        // Выполняем запрос к базе данных
         $data = self::model()->findAll($criteria);
 
+        // Группируем данные
         $result = [
             'labels' => [],
             'dataA' => [],
@@ -103,29 +104,30 @@ class VoltageData extends CActiveRecord {
         ];
 
         foreach ($data as $record) {
-            // Группируем данные по временным меткам
+            // Форматируем временную метку
             $timestamp = Yii::app()->dateFormatter->format('d.MM.yyyy HH:mm:ss', $record->timestamp);
 
-            // Проверяем, есть ли уже эта метка
-            $index = array_search($timestamp, $result['labels']);
-            if ($index === false) {
-                $result['labels'][] = $timestamp;
-                $index = count($result['labels']) - 1;
+            // Если метка еще не добавлена, добавляем её
+            if (!isset($result['labels'][$timestamp])) {
+                $result['labels'][$timestamp] = true;
             }
 
             // Заполняем данные для каждой фазы
             switch ($record->phase_type) {
                 case 'A':
-                    $result['dataA'][$index] = $record->value;
+                    $result['dataA'][$timestamp] = $record->value;
                     break;
                 case 'B':
-                    $result['dataB'][$index] = $record->value;
+                    $result['dataB'][$timestamp] = $record->value;
                     break;
                 case 'C':
-                    $result['dataC'][$index] = $record->value;
+                    $result['dataC'][$timestamp] = $record->value;
                     break;
             }
         }
+
+        // Преобразуем labels обратно в массив
+        $result['labels'] = array_keys($result['labels']);
 
         return $result;
     }
