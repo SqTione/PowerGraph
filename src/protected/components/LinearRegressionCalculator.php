@@ -5,6 +5,11 @@ class LinearRegressionCalculator {
     private $b;                     // Свободный член
 
     public function __construct(array $data) {
+        foreach ($data as $point) {
+            if (!is_array($point) || count($point) !== 2) {
+                throw new InvalidArgumentException("Each data point must be an array with two values: [X, Y].");
+            }
+        }
         $this->data = $data;
     }
 
@@ -14,6 +19,12 @@ class LinearRegressionCalculator {
     protected function calculate() {
         // Подсчёт количества точек в наборе данных
         $numberOfPoints = count($this->data);
+
+        // Проверка минимального количества точек для вычисления дисперсии
+        if ($numberOfPoints < 2) {
+            Yii::log("Not enough data points to calculate variance.", CLogger::LEVEL_WARNING);
+            return [];
+        }
 
         // Начало подсчёта суммы значений для X и Y
         $xValuesSum= 0;
@@ -76,6 +87,8 @@ class LinearRegressionCalculator {
      * @return array Массив точек с наибольшим отклонением от линейной регрессии
     */
     public function findOutliers(): array {
+        $this->calculate();
+
         // Инициализация массивов для хранения остатков и соответствующих точек
         $residuals = [];
         $outliers = [];
