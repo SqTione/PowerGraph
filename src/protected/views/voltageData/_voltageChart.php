@@ -32,6 +32,7 @@
     });
 
 
+    // Создает и настраивает новый график
     function createChart(chartData) {
         const ctx = document.getElementById('voltage-chart').getContext('2d');
 
@@ -88,6 +89,7 @@
         });
     }
 
+    // Обновляет график
     function updateChart() {
         const period = document.getElementById('period_select').value;
         const dateRangeDiv = document.getElementById('date-range');
@@ -114,12 +116,13 @@
         });
     }
 
+    // Высчитывает ширину контейнера графика
     function calculateChartWidth() {
         const chartContainerBody = document.querySelector('.chart__container-body');
         const totalLabels = voltageChartInstance.data.labels.length;
 
-        if(totalLabels > 24) {
-            const newWidth = 1000 + ((totalLabels - 24) * 20);
+        if(totalLabels > 20) {
+            const newWidth = 1000 + ((totalLabels - 20) * 20);
             chartContainerBody.style.width = `${newWidth}px`;
         } else {
             chartContainerBody.style.width = '100%';
