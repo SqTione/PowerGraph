@@ -13,7 +13,7 @@ $this->pageTitle = "Счётчик {$meter->name} |";
             <img src="<?php echo Yii::app()->request->baseUrl; ?>/images/icons/pencil.svg" alt="">
         </button>
     </div>
-    <p class="meter__description">Счётчик распределительного щита ЩР-7</p>
+    <p class="meter__description"><?php echo CHtml::encode($meter->description); ?></p>
     <hr class="separator">
     <div class="graph">
         <div class="graph__settings">
