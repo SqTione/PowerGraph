@@ -516,6 +516,11 @@ a {
     width: 100%;
 }
 
+#meter-name[contenteditable="true"], #meter-description[contenteditable="true"] {
+    cursor: text; /* Показываем текстовый курсор */
+    outline: none;
+}
+
 #edit-button {
     display: flex;
     justify-content: center;
@@ -536,6 +541,11 @@ a {
 }
 
 #edit-button:hover {
+    border: solid 1px var(--grey-500);
+    box-shadow: 0 0 12px var(--grey-500-transparent-40);
+}
+
+#edit-button.active {
     border: solid 1px var(--grey-500);
     box-shadow: 0 0 12px var(--grey-500-transparent-40);
 }
@@ -738,4 +748,21 @@ a {
     .graph__legend {
         margin: 0 auto;
     }
+}
+
+#go-back {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    font-family: Inter;
+    font-size: var(--font-size-sm);
+    color: var(--grey-400);
+    text-decoration: none;
+    cursor: pointer;
+    transition: padding 0.25s ease-in;
+}
+
+#go-back:hover {
+    padding-left: 0.75rem;
 }

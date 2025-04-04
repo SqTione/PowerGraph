@@ -44,7 +44,46 @@ class SiteController extends Controller
      * Отрисовывает страницу мои счётчики
     */
     public function actionUserMeters() {
-        $this->render('user_meters');
+        // Получаем все счётчики из БД
+        $meters = Meters::model()->findAll();
+
+        // Передаем данные в представление
+        $this->render('user_meters', [
+            'meters' => $meters,
+        ]);
+    }
+
+    public function actionUpdateUserMeter()
+    {
+        if (Yii::app()->request->isAjaxRequest && isset($_POST['id'])) {
+            $id = (int)$_POST['id'];
+
+            // Проверяем существование счётчика
+            $meter = Meters::model()->findByPk($id);
+            if (!$meter) {
+                echo CJSON::encode(['success' => false, 'message' => 'Счётчик не найден.']);
+                Yii::app()->end();
+            }
+
+            // Обновляем данные
+            $meter->name = $_POST['name'];
+            $meter->description = $_POST['description'];
+
+            // Сохраняем изменения
+            if ($meter->save()) {
+                header('Content-Type: application/json');
+                echo CJSON::encode(['success' => true, 'message' => 'Данные успешно обновлены.']);
+            } else {
+                header('Content-Type: application/json');
+                echo CJSON::encode(['success' => false, 'message' => 'Ошибка при сохранении данных.']);
+            }
+
+            Yii::app()->end();
+        } else {
+            header('Content-Type: application/json');
+            echo CJSON::encode(['success' => false, 'message' => 'Неверный запрос.']);
+            Yii::app()->end();
+        }
     }
 
     /**

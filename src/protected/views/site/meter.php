@@ -7,13 +7,17 @@ $this->pageTitle = "Счётчик {$meter->name} |";
 ?>
 
 <main class="container" id="meter">
+     <a href="<?php echo Yii::app()->createUrl('site/usermeters'); ?>" id="go-back">
+        <img src="<?php Yii::app()->request->baseUrl; ?>/images/icons/arrow_left.svg" alt="">
+        К счётчикам
+    </a>
     <div class="section__title">
-        <h1><?php echo CHtml::encode($meter->name) ?></h1>
+        <h1 id="meter-name" data-id="<?php echo $meter->id; ?>" contenteditable="false"><?php echo CHtml::encode($meter->name) ?></h1>
         <button type="button" id="edit-button">
             <img src="<?php echo Yii::app()->request->baseUrl; ?>/images/icons/pencil.svg" alt="">
         </button>
     </div>
-    <p class="meter__description"><?php echo CHtml::encode($meter->description); ?></p>
+    <p class="meter__description" id="meter-description"><?php echo CHtml::encode($meter->description); ?></p>
     <hr class="separator">
     <div class="graph">
         <div class="graph__settings">
@@ -71,7 +75,58 @@ $this->pageTitle = "Счётчик {$meter->name} |";
         </div>
     </div>
 </main>
+<!-- Скрипт редактирования счётчика -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        const editButton = $('#edit-button');
+        const meterName = $('#meter-name');
+        const meterDescription = $('#meter-description');
 
+        let isEditing = false;
+
+        // Переключение режима редактирования
+        editButton.on('click', function () {
+            if (!isEditing) {
+                // Включаем редактирование
+                meterName.attr('contenteditable', true);
+                meterDescription.attr('contenteditable', true);
+                meterName.focus();
+                editButton.addClass('active');
+                isEditing = true;
+            } else {
+                // Отключаем редактирование и сохраняем изменения
+                meterName.attr('contenteditable', false);
+                meterDescription.attr('contenteditable', false);
+                editButton.removeClass('active');
+                isEditing = false;
+
+                // Получаем новые значения
+                const id = meterName.data('id');
+                const name = meterName.text().trim();
+                const description = meterDescription.text().trim();
+
+                // Отправляем изменения на сервер
+                $.ajax({
+                    url: '<?php echo Yii::app()->createUrl("site/updateUserMeter"); ?>',
+                    method: 'POST',
+                    data: { id: id, name: name, description: description },
+                    success: function (response) {
+                        if (response.success) {
+                            alert('Данные успешно обновлены.');
+                        } else {
+                            alert('Ошибка при обновлении данных.');
+                        }
+                    },
+                    error: function () {
+                        alert('Произошла ошибка при отправке данных.');
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<!-- Скрипт отображения графика-->
 <script type="text/javascript">
     let voltageChartInstance = null;
 
