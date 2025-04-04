@@ -44,31 +44,35 @@
                 </a>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque non vehicula risus. Sed pretium diam id orci iaculis, sit amet tincidunt leo blandit.</p>
             </div>
-            <nav class="footer__nav">
-                <ul>
-                    <li><a href="<?php echo Yii::app()->createUrl('site/usermeters'); ?>">Мои счётчики</a></li>
-                    <li><a href="#">Выйти из аккаунта</a></li>
-                </ul>
-            </nav>
-            <div class="footer__contacts-container">
-                <ul class="footer__contacts">
-                    <li>
-                        <a href="mailto:powergraph@mail.ru">
-                            <img src="<?php Yii::app()->request->baseUrl; ?>/images/icons/email.svg" alt="">
-                            powergraph@mail.ru
-                        </a>
-                    </li>
-                    <li>
-                        <a href="tel:+79123456789">
-                            <img src="<?php Yii::app()->request->baseUrl; ?>/images/icons/phone.svg" alt="">
-                            +7 (912) 345-67-89
-                        </a>
-                    </li>
-                </ul>
-                <ul class="footer__socials">
-                    <li><a href="#"><img src="<?php Yii::app()->request->baseUrl; ?>/images/icons/telegram.svg" alt=""></a></li>
-                    <li><a href="#"><img src="<?php Yii::app()->request->baseUrl; ?>/images/icons/github.svg" alt=""></a></li>
-                </ul>
+            <div class="footer__group">
+                <nav class="footer__nav">
+                    <ul>
+                        <li><a href="<?php echo Yii::app()->createUrl('site/usermeters'); ?>">Мои счётчики</a></li>
+                        <li><a href="#">Выйти из аккаунта</a></li>
+                    </ul>
+                </nav>
+                <div class="footer__contacts-container">
+                    <ul class="footer__contacts">
+                        <li>
+                            <a href="mailto:powergraph@mail.ru">
+                                <img src="<?php Yii::app()->request->baseUrl; ?>/images/icons/email.svg" alt="">
+                                powergraph@mail.ru
+                            </a>
+                        </li>
+                        <li>
+                            <a href="tel:+79123456789">
+                                <img src="<?php Yii::app()->request->baseUrl; ?>/images/icons/phone.svg" alt="">
+                                +7 (912) 345-67-89
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="footer__socials">
+                        <li><a href="#"><img src="<?php Yii::app()->request->baseUrl; ?>/images/icons/telegram.svg"
+                                             alt=""></a></li>
+                        <li><a href="#"><img src="<?php Yii::app()->request->baseUrl; ?>/images/icons/github.svg"
+                                             alt=""></a></li>
+                    </ul>
+                </div>
             </div>
             <div class="footer__copyright">
                 <p>Powergraph &copy; <?php echo date('Y');?></p>

@@ -28,6 +28,18 @@
     @media screen and (width >= 640px) {
         --container-padding-x: 2rem;
     }
+    @media  screen and (width >= 768px) {
+        --container-padding-x: 4rem;
+    }
+    @media screen and (width >= 1024px) {
+        --container-padding-x: 8rem;
+    }
+    @media screen and (width >= 1280px) {
+        --container-padding-x: 12rem;
+    }
+    @media screen and (width >= 1536px) {
+        --container-padding-x: 18rem;
+    }
 
     /* Фоновые цвета */
     --page-bg: var(--grey-800);
@@ -94,7 +106,6 @@ a {
     position: relative;
     padding: 0 var(--container-padding-x);
     width: 100%;
-    max-width: calc(100vh - var(--container-padding-x) * 2);
 }
 
 .button {
@@ -267,9 +278,11 @@ a {
     justify-content: space-between;
     align-items: center;
     margin: 2rem 0;
+    width: 100vw;
 }
 
 #footer {
+    position: relative;
     margin-top: 3.75rem;
     padding-top: 2rem;
     padding-bottom: 3.75rem;
@@ -295,6 +308,12 @@ a {
     margin-bottom: 1.5rem;
 }
 
+@media screen and (width >= 1024px) {
+    .footer__info {
+        width: 50%;
+    }
+}
+
 .footer__nav ul {
     display: flex;
     justify-content: space-between;
@@ -302,6 +321,12 @@ a {
     flex-wrap: wrap;
     gap: 1.5rem;
     margin-bottom: 1.5rem   ;
+}
+
+@media screen and (width >= 640px) {
+    .footer__nav ul {
+        justify-content: flex-start;
+    }
 }
 
 .footer__contacts-container {
@@ -339,6 +364,37 @@ a {
 
 .footer__designer a {
     text-decoration: underline !important;
+}
+
+@media screen and (width >= 1024px) {
+    .footer__group {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .footer__nav ul {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .footer__contacts-container {
+        flex: 0.75;
+    }
+}
+
+@media screen and (width >= 1280px) {
+    .footer__contacts-container {
+        flex: 0.7;
+    }
+}
+
+@media screen and (width >= 1536px) {
+    .footer__contacts-container {
+        flex: 0.65;
+    }
 }
 
 .auth {
@@ -487,6 +543,12 @@ a {
     overflow-x: hidden;
 }
 
+@media screen and (width >= 640px) {
+    .graph__period-radio {
+        width: max-content;
+    }
+}
+
 .graph__period-radio > .radio__container {
     display: flex;
     align-items: center;
@@ -590,6 +652,21 @@ a {
     box-shadow: 0px 0px 12px var(--grey-500-transparent-40);
 }
 
+@media screen and (width >= 640px) {
+    #date-range {
+        width: 70%;
+    }
+}
+
+@media screen and (width >= 768px) {
+    #date-range {
+        width: auto;
+    }
+    #date-range input {
+        width: 180px;
+    }
+}
+
 .graph__container {
     margin-bottom: 2rem;
 }
@@ -598,6 +675,7 @@ a {
     display: flex;
     align-items: center;
     gap: 1.25rem;
+    width: max-content;
 }
 
 .graph__legend .legend__item {
@@ -631,4 +709,10 @@ a {
     font-family: Inter;
     font-size: var(--font-size-sm);
     color: var(--grey-400);
+}
+
+@media screen and (width >= 1024px) {
+    .graph__legend {
+        margin: 0 auto;
+    }
 }
