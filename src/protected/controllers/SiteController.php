@@ -1,5 +1,7 @@
 <?php
 
+use Couchbase\Meter;
+
 class SiteController extends Controller
 {
 	/**
@@ -22,15 +24,53 @@ class SiteController extends Controller
 	}
 
 	/**
-	 * This is the default 'index' action that is invoked
-	 * when an action is not explicitly requested by users.
+	 * Отрисовывает основную страницу(вход в аккаунт)
 	 */
 	public function actionIndex()
 	{
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('index');
+		$this->render('login');
 	}
+
+    /**
+     * Отрисовывает страницу регистрации
+    */
+    public function actionRegister() {
+        $this->render('register');
+    }
+
+    /**
+     * Отрисовывает страницу мои счётчики
+    */
+    public function actionUserMeters() {
+        $this->render('user_meters');
+    }
+
+    /**
+     * Отрисовывает страницу счётчика
+    */
+    public function actionMeter($id) {
+        // Получаем данные счётчика
+
+        $meter = Meters::model()->findByPk($id);
+        if (!$meter) {
+            throw new CHttpException(404, 'Счётчик не найден.');
+        }
+
+        // Устанавливаем фиксированный период "сегодня" для начальной загрузки
+        $period = 'today';
+
+        // Получаем данные для графика
+        $service = new PrepareVoltageDataService($id, $period);
+        $chartData = $service->prepareVoltageData();
+
+        // Передаем данные в представление
+        $this->render('meter', [
+            'meter' => $meter,
+            'chartData' => $chartData['chartData'],
+        ]);
+    }
 
 	/**
 	 * This is the action to handle external exceptions.

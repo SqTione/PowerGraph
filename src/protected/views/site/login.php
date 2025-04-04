@@ -1,53 +1,44 @@
 <?php
 /* @var $this SiteController */
-/* @var $model LoginForm */
-/* @var $form CActiveForm  */
 
-$this->pageTitle=Yii::app()->name . ' - Login';
-$this->breadcrumbs=array(
-	'Login',
-);
+$this->pageTitle = Yii::app()->name . ' Вход |';
 ?>
 
-<h1>Login</h1>
-
-<p>Please fill out the following form with your login credentials:</p>
-
-<div class="form">
-<?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'login-form',
-	'enableClientValidation'=>true,
-	'clientOptions'=>array(
-		'validateOnSubmit'=>true,
-	),
-)); ?>
-
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'username'); ?>
-		<?php echo $form->textField($model,'username'); ?>
-		<?php echo $form->error($model,'username'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'password'); ?>
-		<?php echo $form->passwordField($model,'password'); ?>
-		<?php echo $form->error($model,'password'); ?>
-		<p class="hint">
-			Hint: You may login with <kbd>demo</kbd>/<kbd>demo</kbd> or <kbd>admin</kbd>/<kbd>admin</kbd>.
-		</p>
-	</div>
-
-	<div class="row rememberMe">
-		<?php echo $form->checkBox($model,'rememberMe'); ?>
-		<?php echo $form->label($model,'rememberMe'); ?>
-		<?php echo $form->error($model,'rememberMe'); ?>
-	</div>
-
-	<div class="row buttons">
-		<?php echo CHtml::submitButton('Login'); ?>
-	</div>
-
-<?php $this->endWidget(); ?>
-</div><!-- form -->
+<main class="auth container">
+    <div class="auth__form form" id="login-form">
+        <div class="form__header">
+            <h1>Вход</h1>
+            <p>Ещё нет аккаунта?</p>
+            <a href="<?php echo Yii::app()->createUrl('site/register'); ?>">Зарегистрируйтесь!</a>
+            <hr class="separator">
+        </div>
+        <div class="form__body">
+            <div class="form__field">
+                <label for="login-form__email">Email:</label>
+                <input
+                    type="email"
+                    name="login-form__email"
+                    id="login-form__email"
+                    placeholder="email@mail.ru">
+            </div>
+            <div class="form__field">
+                <label for="login-form__password">Пароль:</label>
+                <input
+                    type="password"
+                    name="login-form__password"
+                    id="login-form__password"
+                    placeholder="Ваш пароль">
+            </div>
+            <div class="form__checkbox">
+                <label class="custom-checkbox">
+                    <input type="checkbox" name="login-form__password" id="login-form__checkbox">
+                    <span class="checkmark"></span>
+                    Запомнить меня
+                </label>
+            </div>
+        </div>
+        <div class="form__footer">
+            <button type="submit" class="form__submit button">Войти</button>
+        </div>
+    </div>
+</main>

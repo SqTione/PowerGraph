@@ -1,59 +1,80 @@
-<?php /* @var $this Controller */ ?>
+<?php /* @var $this Controller */
+    $this->pageTitle = '';
+?>
+
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="language" content="en">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="language" content="ru">
 
-	<!-- blueprint CSS framework -->
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection">
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/print.css" media="print">
-	<!--[if lt IE 8]>
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/ie.css" media="screen, projection">
-	<![endif]-->
+    <link rel="icon" href="<?php echo Yii::app()->request->baseUrl; ?>/images/icons/meter.svg">
+    <link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/images/icons/meter.svg">
 
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/style.css" type="text/css">
 
-	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
+	<title><?php echo CHtml::encode($this->pageTitle); ?> PowerGraph </title>
 </head>
-
 <body>
+    <div id="page">
+        <!-- Header -->
+        <div class="container" id="header">
+            <a href="#" class="logo">
+                <img src="" alt="">
+                Logo
+            </a>
+            <a href="#" class="logout">
+                <img src="<?php echo Yii::app()->request->baseUrl; ?>/images/icons/logout.svg" alt="">
+            </a>
+        </div>
 
-<div class="container" id="page">
+        <!-- Page content -->
+        <?php echo $content; ?>
 
-	<div id="header">
-		<div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
-	</div><!-- header -->
-
-	<div id="mainmenu">
-		<?php $this->widget('zii.widgets.CMenu',array(
-			'items'=>array(
-				array('label'=>'Home', 'url'=>array('/site/index')),
-				array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
-				array('label'=>'Contact', 'url'=>array('/site/contact')),
-				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
-				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
-			),
-		)); ?>
-	</div><!-- mainmenu -->
-	<?php if(isset($this->breadcrumbs)):?>
-		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
-			'links'=>$this->breadcrumbs,
-		)); ?><!-- breadcrumbs -->
-	<?php endif?>
-
-	<?php echo $content; ?>
-
-	<div class="clear"></div>
-
-	<div id="footer">
-		Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
-		All Rights Reserved.<br/>
-		<?php echo Yii::powered(); ?>
-	</div><!-- footer -->
-
-</div><!-- page -->
-
+        <!-- Footer -->
+        <div class="container" id="footer">
+            <div class="footer__info">
+                <a href="#" class="logo">
+                    <img src="" alt="">
+                    Logo
+                </a>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque non vehicula risus. Sed pretium diam id orci iaculis, sit amet tincidunt leo blandit.</p>
+            </div>
+            <nav class="footer__nav">
+                <ul>
+                    <li><a href="<?php echo Yii::app()->createUrl('site/usermeters'); ?>">Мои счётчики</a></li>
+                    <li><a href="#">Выйти из аккаунта</a></li>
+                </ul>
+            </nav>
+            <div class="footer__contacts-container">
+                <ul class="footer__contacts">
+                    <li>
+                        <a href="mailto:powergraph@mail.ru">
+                            <img src="<?php Yii::app()->request->baseUrl; ?>/images/icons/email.svg" alt="">
+                            powergraph@mail.ru
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tel:+79123456789">
+                            <img src="<?php Yii::app()->request->baseUrl; ?>/images/icons/phone.svg" alt="">
+                            +7 (912) 345-67-89
+                        </a>
+                    </li>
+                </ul>
+                <ul class="footer__socials">
+                    <li><a href="#"><img src="<?php Yii::app()->request->baseUrl; ?>/images/icons/telegram.svg" alt=""></a></li>
+                    <li><a href="#"><img src="<?php Yii::app()->request->baseUrl; ?>/images/icons/github.svg" alt=""></a></li>
+                </ul>
+            </div>
+            <div class="footer__copyright">
+                <p>Powergraph &copy; <?php echo date('Y');?></p>
+                <p class="footer__designer">Designed by <a href="#">SqTione</a></p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

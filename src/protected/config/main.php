@@ -45,6 +45,7 @@ return array(
             'showScriptName' => false,
             'rules'=>array(
                 /* Маршруты для API */
+                'meter/<id:\d+>' => 'site/meter',
                 'voltage-data' => 'voltageData/index',      // Маршрут вывода мгновенных значений в виде графика
 
                 /* Стандартные маршруты */
