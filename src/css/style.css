@@ -403,6 +403,26 @@ a {
     height: calc(100vh - 160px);
 }
 
+@media screen and (width >= 640px) {
+    .auth {
+        margin: 0 auto;
+        width: 80%;
+    }
+}
+
+@media screen and (width >= 768px) {
+    .auth {
+        padding-top: 10%;
+        width: 60%;
+    }
+}
+
+@media screen and (width >= 1280px) {
+    .auth {
+        padding-top: 7%;
+    }
+}
+
 /* Страница "Мои счётчики" */
 .my-meters .section__title {
     display: flex;
