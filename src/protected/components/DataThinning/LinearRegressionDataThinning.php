@@ -81,7 +81,7 @@ class LinearRegressionDataThinning implements IDataThinningStrategy
                 foreach ($outliers as $outlier) {
                     $timestamp = $outlier[0];
 
-                    // Добавляем саму аномалию
+                    // Добавляем аномалию
                     if (isset($dataByTimestamp[$timestamp])) {
                         $enrichedAnomalies[] = $dataByTimestamp[$timestamp];
                     }
