@@ -67,10 +67,20 @@
                         </li>
                     </ul>
                     <ul class="footer__socials">
-                        <li><a href="#"><img src="<?php Yii::app()->request->baseUrl; ?>/images/icons/telegram.svg"
-                                             alt=""></a></li>
-                        <li><a href="#"><img src="<?php Yii::app()->request->baseUrl; ?>/images/icons/github.svg"
-                                             alt=""></a></li>
+                        <li>
+                            <a href="http://t.me/sqtione">
+                                <img
+                                    src="<?php Yii::app()->request->baseUrl; ?>/images/icons/telegram.svg"
+                                    alt="">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/SqTione/PowerGraph">
+                                <img
+                                    src="<?php Yii::app()->request->baseUrl; ?>/images/icons/github.svg"
+                                    alt="">
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
