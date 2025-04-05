@@ -13,7 +13,7 @@ class Meters extends CActiveRecord {
             // Правила валидации
             ['api_id', 'numerical', 'integerOnly' => true],
             ['api_id', 'unique'],
-            ['name, api_id', 'length', 'max' => 255],
+            ['name, api_id, description', 'length', 'max' => 255],
         ];
     }
 
@@ -21,7 +21,8 @@ class Meters extends CActiveRecord {
         return [
             'id' => 'ID счётчика',
             'name' => 'Название счётчика',
-            'api_id' => 'API ID счётчика'
+            'api_id' => 'API ID счётчика',
+            'description' => 'Описание счётчика'
         ];
     }
 

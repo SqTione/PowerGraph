@@ -7,4 +7,5 @@ return array(
     'username'=>'user',
     'password'=>'user_password',
     'emulatePrepare'=>true,
+    'charset'=>'utf8',
 );

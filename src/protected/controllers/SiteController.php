@@ -1,5 +1,7 @@
 <?php
 
+use Couchbase\Meter;
+
 class SiteController extends Controller
 {
 	/**
@@ -22,15 +24,92 @@ class SiteController extends Controller
 	}
 
 	/**
-	 * This is the default 'index' action that is invoked
-	 * when an action is not explicitly requested by users.
+	 * Отрисовывает основную страницу(вход в аккаунт)
 	 */
 	public function actionIndex()
 	{
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('index');
+		$this->render('login');
 	}
+
+    /**
+     * Отрисовывает страницу регистрации
+    */
+    public function actionRegister() {
+        $this->render('register');
+    }
+
+    /**
+     * Отрисовывает страницу мои счётчики
+    */
+    public function actionUserMeters() {
+        // Получаем все счётчики из БД
+        $meters = Meters::model()->findAll();
+
+        // Передаем данные в представление
+        $this->render('user_meters', [
+            'meters' => $meters,
+        ]);
+    }
+
+    public function actionUpdateUserMeter()
+    {
+        if (Yii::app()->request->isAjaxRequest && isset($_POST['id'])) {
+            $id = (int)$_POST['id'];
+
+            // Проверяем существование счётчика
+            $meter = Meters::model()->findByPk($id);
+            if (!$meter) {
+                echo CJSON::encode(['success' => false, 'message' => 'Счётчик не найден.']);
+                Yii::app()->end();
+            }
+
+            // Обновляем данные
+            $meter->name = $_POST['name'];
+            $meter->description = $_POST['description'];
+
+            // Сохраняем изменения
+            if ($meter->save()) {
+                header('Content-Type: application/json');
+                echo CJSON::encode(['success' => true, 'message' => 'Данные успешно обновлены.']);
+            } else {
+                header('Content-Type: application/json');
+                echo CJSON::encode(['success' => false, 'message' => 'Ошибка при сохранении данных.']);
+            }
+
+            Yii::app()->end();
+        } else {
+            header('Content-Type: application/json');
+            echo CJSON::encode(['success' => false, 'message' => 'Неверный запрос.']);
+            Yii::app()->end();
+        }
+    }
+
+    /**
+     * Отрисовывает страницу счётчика
+    */
+    public function actionMeter($id) {
+        // Получаем данные счётчика
+
+        $meter = Meters::model()->findByPk($id);
+        if (!$meter) {
+            throw new CHttpException(404, 'Счётчик не найден.');
+        }
+
+        // Устанавливаем фиксированный период "сегодня" для начальной загрузки
+        $period = 'today';
+
+        // Получаем данные для графика
+        $service = new PrepareVoltageDataService($id, $period);
+        $chartData = $service->prepareVoltageData();
+
+        // Передаем данные в представление
+        $this->render('meter', [
+            'meter' => $meter,
+            'chartData' => $chartData['chartData'],
+        ]);
+    }
 
 	/**
 	 * This is the action to handle external exceptions.
