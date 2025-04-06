@@ -24,13 +24,11 @@ class SiteController extends Controller
 	}
 
 	/**
-	 * Отрисовывает основную страницу(вход в аккаунт)
+	 * Отрисовывает основную страницу(мои счётчики)
 	 */
 	public function actionIndex()
 	{
-		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('login');
+		$this->actionUserMeters();
 	}
 
     /**
