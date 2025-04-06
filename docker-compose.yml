@@ -13,7 +13,7 @@ services:
       - rabbitmq
     networks:
       - power_graph_network
-    command: ["bash", "-c", "chown -R www-data:www-data /var/www/html/assets /var/www/html/protected/runtime && chmod -R 775 /var/www/html/assets /var/www/html/protected/runtime && cron && php-fpm"]
+    command: ["entrypoint.sh"]
     tty: true
 
   # Nginx

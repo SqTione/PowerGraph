@@ -1,3 +1,4 @@
+# Базовый образ
 FROM php:7.4-fpm
 
 # Установка зависимостей
@@ -29,14 +30,6 @@ RUN pecl install amqp && docker-php-ext-enable amqp
 # Установка Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Настройка прав для runtime и assets
-RUN mkdir -p /var/www/html/protected/runtime \
-    && mkdir -p /var/www/html/assets \
-    && chown -R www-data:www-data /var/www/html/protected/runtime \
-    && chown -R www-data:www-data /var/www/html/assets \
-    && chmod -R 775 /var/www/html/protected/runtime \
-    && chmod -R 775 /var/www/html/assets
-
 # Установка рабочей директории
 WORKDIR /var/www/html
 
@@ -46,14 +39,17 @@ COPY ./src /var/www/html
 # Копируем crontab-файл
 COPY ./docker/crontab /etc/cron.d/mycron
 
-# Даем права
+# Даем права на crontab-файл
 RUN chmod 0644 /etc/cron.d/mycron
 
 # Добавляем cron в автозапуск
 RUN crontab /etc/cron.d/mycron
 
-# Установка зависимостей через Composer
-RUN composer install --no-dev --prefer-dist
+# Копируем entrypoint скрипт
+COPY ./docker/php/entrypoint.sh /usr/local/bin/entrypoint.sh
 
-# Запуск PHP-FPM
-CMD ["php-fpm"]
+# Делаем entrypoint скрипт исполняемым
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Указываем entrypoint
+CMD ["entrypoint.sh"]
