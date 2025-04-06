@@ -15,20 +15,20 @@
     --cyan-600-transparent-40: rgba(102, 255, 237, 0.4);
 
     /* Размеры текста */
-    --font-size-xs: 0.75rem;        /* 12 px */
-    --font-size-sm: 0.876rem;       /* 14 px */
-    --font-size-base: 1rem;         /* 16 px */
-    --font-size-md: 1.125rem;       /* 18 px */
-    --font-size-xl: 1.5rem;         /* 24 px */
-    --font-size-2xl: 1.75rem;       /* 28 px */
+    --font-size-xs: 0.75rem; /* 12 px */
+    --font-size-sm: 0.876rem; /* 14 px */
+    --font-size-base: 1rem; /* 16 px */
+    --font-size-md: 1.125rem; /* 18 px */
+    --font-size-xl: 1.5rem; /* 24 px */
+    --font-size-2xl: 1.75rem; /* 28 px */
 
     /* Отступы от контейнера */
-    --container-padding-x: 1.5rem;  /* 24 px */
+    --container-padding-x: 1.5rem; /* 24 px */
 
     @media screen and (width >= 640px) {
         --container-padding-x: 2rem;
     }
-    @media  screen and (width >= 768px) {
+    @media screen and (width >= 768px) {
         --container-padding-x: 4rem;
     }
     @media screen and (width >= 1024px) {
@@ -74,7 +74,7 @@
 body {
     font-family: Inter;
     color: var(--white);
-    background-color: var(--page-bg );
+    background-color: var(--page-bg);
     background: url("../images/page_background_mobile.png") center no-repeat;
     background-size: cover;
 }
@@ -93,7 +93,10 @@ a {
 }
 
 .logo {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 140px;
     overflow: hidden;
 }
 
@@ -177,9 +180,8 @@ a {
     color: var(--white);
     cursor: pointer;
     backdrop-filter: var(--background-blur);
-    transition:
-            border 0.25s ease-in,
-            box-shadow 0.25s ease-in;
+    transition: border 0.25s ease-in,
+    box-shadow 0.25s ease-in;
 }
 
 .form__field > input:focus {
@@ -236,10 +238,9 @@ a {
     border-radius: 4px;
     box-shadow: 0 0 0 transparent;
     backdrop-filter: var(--background-blur);
-    transition:
-            border 0.25s ease-in,
-            box-shadow 0.25s ease-in,
-            background-color 0.25s ease-in;
+    transition: border 0.25s ease-in,
+    box-shadow 0.25s ease-in,
+    background-color 0.25s ease-in;
 }
 
 .custom-checkbox input[type="checkbox"]:hover + .checkmark {
@@ -320,7 +321,7 @@ a {
     align-items: center;
     flex-wrap: wrap;
     gap: 1.5rem;
-    margin-bottom: 1.5rem   ;
+    margin-bottom: 1.5rem;
 }
 
 @media screen and (width >= 640px) {
@@ -474,9 +475,8 @@ a {
     border: solid 1px var(--cyan-600-transparent-40);
     border-radius: 4px;
     backdrop-filter: var(--background-blur);
-    transition:
-            border 0.25s ease-in,
-            box-shadow 0.25s ease-in;
+    transition: border 0.25s ease-in,
+    box-shadow 0.25s ease-in;
     cursor: pointer;
 }
 
@@ -534,9 +534,8 @@ a {
     border-radius: 999px;
     box-shadow: 0 0 0 transparent;
     backdrop-filter: var(--background-blur);
-    transition:
-            border 0.25s ease-in,
-            box-shadow 0.25s ease-in;
+    transition: border 0.25s ease-in,
+    box-shadow 0.25s ease-in;
     cursor: pointer;
 }
 
@@ -609,9 +608,8 @@ a {
     font-family: Inter;
     font-size: var(--font-size-sm);
     color: var(--grey-400);
-    transition:
-        color 0.25s ease-in,
-        text-shadow 0.25s ease-in;
+    transition: color 0.25s ease-in,
+    text-shadow 0.25s ease-in;
 }
 
 
@@ -675,9 +673,8 @@ a {
     color: var(--white);
     cursor: pointer;
     backdrop-filter: var(--background-blur);
-    transition:
-            border 0.25s ease-in,
-            box-shadow 0.25s ease-in;
+    transition: border 0.25s ease-in,
+    box-shadow 0.25s ease-in;
 }
 
 #date-range input:focus {
@@ -695,6 +692,7 @@ a {
     #date-range {
         width: auto;
     }
+
     #date-range input {
         width: 180px;
     }
