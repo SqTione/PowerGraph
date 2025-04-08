@@ -5,6 +5,12 @@ services:
       context: .
       dockerfile: ./docker/php/Dockerfile
     container_name: power_graph_app
+    environment:
+      API_LOGIN: ${API_LOGIN}
+      API_PASSWORD: ${API_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_USER_PASSWORD}
     volumes:
       - ./src:/var/www/html
       - vendor:/var/www/html/vendor
