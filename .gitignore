@@ -30,8 +30,10 @@ src/yii_framework/framework/cli/views/webapp/protected/vendor/
 composer.lock
 
 # Исключаем кэш Yii
-src/protected/runtime/
-assets/
+src/protected/runtime/*
+assets/*
+!src/protected/runtime/
+!assets/
 
 # Исключаем локальные конфигурации
 protected/config/local.php
