@@ -1,1 +1,48 @@
-.idea
+# Исключаем системные файлы
+*.log
+*.sqlite
+*.env
+.env.*
+
+# Исключаем временные файлы
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Исключаем IDE-файлы
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Исключаем файлы операционной системы
+.DS_Store
+Thumbs.db
+
+# Исключаем папки и файлы, связанные с Docker
+docker-compose.override.yml
+.docker/
+
+# Исключаем зависимости
+src/vendor/
+src/yii_framework/framework/cli/views/webapp/protected/vendor/
+composer.lock
+
+# Исключаем кэш Yii
+src/protected/runtime/
+assets/
+
+# Исключаем локальные конфигурации
+protected/config/local.php
+
+# Исключаем загруженные файлы (если есть)
+uploads/
+files/
+
+# Исключаем временные файлы тестов
+tests/_output/
+tests/_support/_generated/
+
+# Исключаем файлы, созданные в процессе работы
+nbproject/
