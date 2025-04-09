@@ -4,7 +4,8 @@
 *.env
 .env.*
 
-!.sample.env
+# Сохраняем .example.env
+!.example.env
 
 # Исключаем временные файлы
 *.tmp
@@ -27,15 +28,16 @@ docker-compose.override.yml
 .docker/
 
 # Исключаем зависимости
-src/vendor
+src/vendor/
 src/yii_framework/framework/cli/views/webapp/protected/vendor/
-src/assets/*
-!src/assets
 composer.lock
 
 # Исключаем кэш Yii
 src/protected/runtime/*
-!src/protected/runtime
+src/assets/*
+# Сохраняем каталоги, даже если они пустые
+!src/protected/runtime/
+!src/assets/
 
 # Исключаем локальные конфигурации
 protected/config/local.php

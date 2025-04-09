@@ -6,11 +6,14 @@ Yii::import('application.services.AuthService');
 Yii::import('application.services.FetchVoltageDataService');
 Yii::import('application.services.VoltageDataProcessor');
 Yii::import('application.components.Queue.RabbitMQProducer');
+Yii::import('application.components.EnvHelper');
 Yii::import('application.models.Meters');
 Yii::import('application.models.VoltageData');
 
 class QueueConsumerCommand extends CConsoleCommand {
     private $shouldStop = false;
+    private $login = null;
+    private $password = null;
 
     /**
      * Получение данных со всех счетчиков и добавление данных в базу.
@@ -19,9 +22,13 @@ class QueueConsumerCommand extends CConsoleCommand {
     public function actionIndex() {
         $config = require Yii::getPathOfAlias('application.config.queue').'.php';
 
+        // Получаем данные для аутентификации из .env
+        $login = EnvHelper::getEnv('API_LOGIN');
+        $password = EnvHelper::getEnv('API_PASSWORD');
+
         $consumer = new RabbitMQConsumer($config);
         $processor = new VoltageDataProcessor(
-            new AuthService('demo@demo.demo', 'demo'),
+            new AuthService($login, $password),
         );
 
         $callback = function ($msg) use ($processor) {

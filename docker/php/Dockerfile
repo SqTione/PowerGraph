@@ -7,14 +7,18 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
+    librabbitmq-dev \
+    build-essential \
+    gcc \
+    make \
+    autoconf \
     zip \
     unzip \
     git \
     cron \
-    nano
+    nano && \
+    docker-php-ext-install pdo_mysql zip gd mbstring xml bcmath intl opcache
 
-# Установка PHP расширений
-RUN docker-php-ext-install pdo_mysql zip gd mbstring xml bcmath intl opcache
 
 # Установка зависимостей для AMQP
 RUN apt-get update && apt-get install -y \
@@ -33,8 +37,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Установка рабочей директории
 WORKDIR /var/www/html
 
-# Копирование файлов проекта
-COPY ./src /var/www/html
+# Копируем основновное приложение
+COPY ./src .
 
 # Копируем crontab-файл
 COPY ./docker/crontab /etc/cron.d/mycron
@@ -45,11 +49,13 @@ RUN chmod 0644 /etc/cron.d/mycron
 # Добавляем cron в автозапуск
 RUN crontab /etc/cron.d/mycron
 
-# Копируем entrypoint скрипт
-COPY ./docker/php/entrypoint.sh /usr/local/bin/entrypoint.sh
+# Создаем необходимые директории, если они отсутствуют
+RUN mkdir -p /var/www/html/protected/runtime /var/www/html/assets && \
+    chown -R www-data:www-data /var/www/html/protected /var/www/html/assets && \
+    chmod -R 775 /var/www/html/protected/runtime /var/www/html/assets
 
-# Делаем entrypoint скрипт исполняемым
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# Установка зависимостей Composer
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Указываем entrypoint
-CMD ["entrypoint.sh"]
+# Запуск PHP FPM
+CMD ["php-fpm"]
