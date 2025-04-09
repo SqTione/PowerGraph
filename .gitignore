@@ -4,6 +4,9 @@
 *.env
 .env.*
 
+# Сохраняем .example.env
+!.example.env
+
 # Исключаем временные файлы
 *.tmp
 *.bak
@@ -31,9 +34,10 @@ composer.lock
 
 # Исключаем кэш Yii
 src/protected/runtime/*
-assets/*
+src/assets/*
+# Сохраняем каталоги, даже если они пустые
 !src/protected/runtime/
-!assets/
+!src/assets/
 
 # Исключаем локальные конфигурации
 protected/config/local.php
