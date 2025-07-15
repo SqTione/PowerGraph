@@ -70,14 +70,13 @@ return array(
                 array(
                     'class'=>'CFileLogRoute',
                     'levels'=>'error, warning, info',
-                    'categories' => 'application.*'
+                    'categories' => 'application.log'
                 ),
                 // uncomment the following to show log messages on web pages
-                /*
+                
                 array(
                     'class'=>'CWebLogRoute',
                 ),
-                */
             ),
         ),
 
