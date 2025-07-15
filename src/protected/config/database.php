@@ -13,5 +13,5 @@ return array(
     'username'=>$db_username,
     'password'=>$db_password,
     'emulatePrepare'=>true,
-    'charset'=>'utf8',
+    'charset'=>'utf8mb4',
 );

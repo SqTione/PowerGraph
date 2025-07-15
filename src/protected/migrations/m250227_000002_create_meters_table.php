@@ -5,6 +5,7 @@ class m250227_000002_create_meters_table extends CDbMigration {
         $this->createTable('meters', [
             'id' => 'pk',
             'name' => 'VARCHAR(255) NOT NULL',
+            'description' => 'TEXT NULL',
             'api_id' => 'int NOT NULL'
         ]);
 
