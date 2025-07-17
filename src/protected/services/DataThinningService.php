@@ -29,6 +29,7 @@ class DataThinningService {
             ];
         }, $oldData);
 
+        // Выполнение транзакции для переноса данных в архивную таблицу
         $transaction = Yii::app()->db->beginTransaction();
         try {
             $this->moveToArchiveTable($preparedOldData);
@@ -40,6 +41,9 @@ class DataThinningService {
         }
     }
 
+    /**
+     * Получение устаревших данных
+     */
     private function getOldData() {
         $data = $this->thinningPeriod->getOldData();
 
@@ -50,6 +54,10 @@ class DataThinningService {
         return $data;
     }
 
+    /**
+     * Перенос аномалий в архивную таблицу
+     * @param mixed $data Аномальные значения
+     */
     private function moveToArchiveTable($data) {
         foreach ($data as $row) {
             $model = new ThinnedVoltageData();
@@ -59,19 +67,12 @@ class DataThinningService {
             } else {
                 Yii::log("Record saved successfully: " . print_r($row, true), CLogger::LEVEL_ERROR, 'application');
             }
-
-            /*Yii::app()->db->createCommand()
-                ->insert('thinned_voltage_data', [
-                    'meter_id' => $row['meter_id'],
-                    'timestamp' => $row['timestamp'],
-                    'phase_type' => $row['phase_type'],
-                    'value' => $row['value'],
-                ]);
-
-            Yii::log("Moved " . count($data) . " records", CLogger::LEVEL_WARNING);*/
         }
     }
 
+    /**
+     * Удаление устаревших данных(старше одной недели)
+     */
     private function deleteOldData() {
         // Вычисляем дату неделю назад
         $oneWeekAgo = date('Y-m-d H:i:s', strtotime("-1 week"));

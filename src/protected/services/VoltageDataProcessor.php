@@ -13,14 +13,11 @@ class VoltageDataProcessor {
     */
     public function process(string $apiMeterId): void {
         try {
-            Yii::log("Processing meter: {$apiMeterId}", CLogger::LEVEL_ERROR);
-
             // Получение нужного счётчика из БД
             $meter = Meters::model()->findByAttributes(['api_id' => $apiMeterId]);
 
             // Аутентификация
             $sessionId = $this->authService->authenticate();
-            Yii::log("Authenticated with session ID: {$sessionId}", CLogger::LEVEL_ERROR);
 
             // Получение мгновенных значений
             $fetchVoltageDataService = new FetchVoltageDataService($sessionId);
@@ -29,7 +26,7 @@ class VoltageDataProcessor {
                 'hour',
                 date('Y-m-d\TH:i:sP')
             );
-            Yii::log("Received " . count($voltageData) . " entries", CLogger::LEVEL_ERROR);
+            Yii::log("Получено " . count($voltageData) . " элементов", CLogger::LEVEL_INFO);
 
             // Обработка записи полученных данных
             foreach ($voltageData as $entry) {
@@ -50,6 +47,7 @@ class VoltageDataProcessor {
                     continue;
                 }
 
+                // Сохранение данные в БД
                 $model = new VoltageData();
                 $model->attributes = $entry;
                 $model->meter_id = $meter->id;
